@@ -4,25 +4,25 @@
 
 | Story | Title | Epic | Status |
 |---|---|---|---|
-| US-01 | Docker Container Bootstrap | E1 – Application Setup | Not Started |
-| US-02 | Application Shell | E1 – Application Setup | Not Started |
-| US-03 | CSV File Upload | E2 – CSV Ingestion | Not Started |
-| US-04 | CSV Parsing and Preview | E2 – CSV Ingestion | Not Started |
-| US-05 | CSV Validation | E2 – CSV Ingestion | Not Started |
-| US-06 | Persist CSV Data to Database | E3 – Data Storage | Not Started |
-| US-07 | Duplicate Handling | E3 – Data Storage | Not Started |
-| US-08 | Clear / Reset Data | E3 – Data Storage | Not Started |
-| US-09 | Browse Stored Records | E4 – Data Review | Not Started |
-| US-10 | Search and Filter Records | E4 – Data Review | Not Started |
-| US-11 | Export to Excel | E5 – Excel Export | Not Started |
-| US-12 | Export Format Compliance | E5 – Excel Export | Not Started |
-| US-13 | Export Confirmation and Feedback | E5 – Excel Export | Not Started |
-| US-14 | GH Copilot Workspace Configuration | E6 – Developer Experience | Not Started |
-| US-15 | Local Development Hot Reload | E6 – Developer Experience | Not Started |
-| US-16 | Database Migration / Schema Init | E6 – Developer Experience | Not Started |
-| US-17 | Mobile and Tablet Layout | E7 – Responsive Design | Not Started |
-| US-18 | Responsive Data Table | E7 – Responsive Design | Not Started |
-| US-19 | Responsive Export and Actions | E7 – Responsive Design | Not Started |
+| US-01 | Docker Container Bootstrap | E1 – Application Setup | Done |
+| US-02 | Application Shell | E1 – Application Setup | Done |
+| US-03 | CSV File Upload | E2 – CSV Ingestion | Done |
+| US-04 | CSV Parsing and Preview | E2 – CSV Ingestion | Done |
+| US-05 | CSV Validation | E2 – CSV Ingestion | Done |
+| US-06 | Persist CSV Data to Database | E3 – Data Storage | Done |
+| US-07 | Duplicate Handling | E3 – Data Storage | Done |
+| US-08 | Clear / Reset Data | E3 – Data Storage | Done |
+| US-09 | Browse Stored Records | E4 – Data Review | Done |
+| US-10 | Search and Filter Records | E4 – Data Review | Done |
+| US-11 | Export to Excel | E5 – Excel Export | Done |
+| US-12 | Export Format Compliance | E5 – Excel Export | Done |
+| US-13 | Export Confirmation and Feedback | E5 – Excel Export | Done |
+| US-14 | GH Copilot Workspace Configuration | E6 – Developer Experience | Done |
+| US-15 | Local Development Hot Reload | E6 – Developer Experience | Done |
+| US-16 | Database Migration / Schema Init | E6 – Developer Experience | Done |
+| US-17 | Mobile and Tablet Layout | E7 – Responsive Design | Done |
+| US-18 | Responsive Data Table | E7 – Responsive Design | Done |
+| US-19 | Responsive Export and Actions | E7 – Responsive Design | Done |
 
 **Statuses:** `Not Started` | `In Progress` | `Done` | `Blocked`
 
@@ -46,7 +46,7 @@
 
 #### US-01 – Docker Container Bootstrap
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to run the application locally using a single Docker command so that I don't need to install any runtime dependencies on my machine.
 
@@ -59,7 +59,7 @@
 
 #### US-02 – Application Shell
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to see a clean, minimal UI layout when I open the app so that I can immediately understand the available actions.
 
@@ -74,7 +74,7 @@
 
 #### US-03 – CSV File Upload
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to upload a CSV file via the UI so that the application can process its contents.
 
@@ -87,7 +87,7 @@
 
 #### US-04 – CSV Parsing and Preview
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to see a preview of the parsed CSV data before saving it so that I can confirm the contents are correct.
 
@@ -100,7 +100,7 @@
 
 #### US-05 – CSV Validation
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want the application to validate the CSV structure against an expected schema so that only well-formed data is saved to the database.
 
@@ -115,7 +115,7 @@
 
 #### US-06 – Persist CSV Data to Database
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want the parsed CSV data to be saved into a local database so that records are available for review and export after ingestion.
 
@@ -128,7 +128,7 @@
 
 #### US-07 – Duplicate Handling
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want the application to handle duplicate records gracefully so that re-uploading the same file doesn't create duplicate entries.
 
@@ -141,7 +141,7 @@
 
 #### US-08 – Clear / Reset Data
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to clear all stored data from the database so that I can start fresh with a new dataset.
 
@@ -156,7 +156,7 @@
 
 #### US-09 – Browse Stored Records
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to view all records currently stored in the database so that I can verify the data before exporting.
 
@@ -169,7 +169,7 @@
 
 #### US-10 – Search and Filter Records
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to search and filter the stored records so that I can quickly find specific entries.
 
@@ -184,7 +184,7 @@
 
 #### US-11 – Export to Excel
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to export the stored data as an Excel file so that I can share it in the expected format.
 
@@ -197,7 +197,7 @@
 
 #### US-12 – Export Format Compliance
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want the Excel export to conform to the predefined output template so that downstream consumers can process it without changes.
 
@@ -210,7 +210,7 @@
 
 #### US-13 – Export Confirmation and Feedback
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want to see confirmation after the Excel file is generated so that I know the export completed successfully.
 
@@ -225,7 +225,7 @@
 
 #### US-14 – GH Copilot Workspace Configuration
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a developer, I want Copilot instruction files configured for the project stack so that Copilot suggestions are context-aware and consistent.
 
@@ -240,7 +240,7 @@
 
 #### US-15 – Local Development Hot Reload
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a developer, I want the Docker container to support hot reload during development so that UI changes are reflected immediately without rebuilding the image.
 
@@ -253,7 +253,7 @@
 
 #### US-16 – Database Migration / Schema Init
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a developer, I want the database schema to be initialized automatically on first run so that no manual setup is required.
 
@@ -268,7 +268,7 @@
 
 #### US-17 – Mobile and Tablet Layout
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want the application to be fully usable on mobile phones and tablets so that I can upload, review, and export data from any device.
 
@@ -284,7 +284,7 @@
 
 #### US-18 – Responsive Data Table
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want the data table to remain readable and interactive on small screens so that I can review records without a desktop.
 
@@ -298,7 +298,7 @@
 
 #### US-19 – Responsive Export and Actions
 
-**Status:** `Not Started`
+**Status:** `Done`
 
 > As a user, I want export and data actions to be easy to reach on mobile so that I can complete my workflow on any device.
 
