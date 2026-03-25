@@ -1,54 +1,81 @@
-### Branch Strategy Guidance
+### Project Overview
 
-#### **Branching Model**
-1. **Main Branch (`main`)**:
-    - The `main` branch is the stable branch that always contains production-ready code.
-    - All changes must be tested and verified before merging into `main`.
+Local-only CSV ingestion → database → Excel export application. Runs in a single Docker container. No authentication. Mobile-first design.
 
-2. **Feature Branches**:
-    - Use feature branches for developing new features or enhancements.
-    - Naming convention: `feature/<feature-name>`.
-    - Example: `feature/add-user-upload`.
+### User Stories
 
-3. **Fix Branches**:
-    - Use fix branches for bug fixes or patches.
-    - Naming convention: `fix/<bug-description>`.
-    - Example: `fix/csv-upload-error`.
+All user stories with epics and acceptance criteria are in `.github/user-stories.md`. Before starting work on any feature or fix:
 
-4. **Hotfix Branches**:
-    - Use hotfix branches for urgent fixes to the `main` branch.
-    - Naming convention: `hotfix/<issue-description>`.
-    - Example: `hotfix/export-crash`.
+1. Open `.github/user-stories.md` alongside your working files so Copilot has the acceptance criteria in context.
+2. Identify the relevant user story and work only within its scope.
+3. Update the story's status in the Progress Tracker table and the individual Status field.
+4. Reference the story in your commit message: `Ref: US-03`.
 
-#### **Workflow**
-1. **Create a Branch**:
-    - Create a new branch from `main` for each feature, fix, or hotfix.
-    - Example:
-      ```bash
-      git checkout -b feature/add-user-upload
-      ```
+### Technology Stack
 
-2. **Develop and Test**:
-    - Implement the changes in the branch.
-    - Test the changes locally to ensure they work as expected.
+#### Frontend
 
-3. **Merge into `main`**:
-    - Once the changes are complete and tested, merge the branch into `main`.
-    - Example:
-      ```bash
-      git checkout main
-      git merge feature/add-user-upload
-      ```
+| Concern | Technology |
+|---|---|
+| Framework | React 18+ with TypeScript |
+| Build tool | Vite |
+| Styling | Tailwind CSS (mobile-first breakpoints) |
+| UI components | shadcn/ui (Radix + Tailwind, copied into `src/components/ui/`) |
+| Data table | TanStack Table (headless) |
+| Data fetching | TanStack Query for all API calls |
+| Forms / validation | React Hook Form + Zod |
+| CSV parsing | PapaParse |
+| Layout | Tab-based single-page app (Upload, Review, Export) — no router |
 
-4. **Delete the Branch**:
-    - After merging, delete the branch to keep the repository clean.
-    - Example:
-      ```bash
-      git branch -d feature/add-user-upload
-      ```
+#### Backend
 
-#### **Best Practices**
-- Keep branches small and focused on a single task.
-- Regularly pull updates from `main` to keep the branch up-to-date.
-- Use clear and descriptive branch names.
-- Test thoroughly before merging to ensure stability.
+| Concern | Technology |
+|---|---|
+| Framework | Fastify with TypeScript |
+| Database | SQLite via `better-sqlite3` |
+| Excel generation | `exceljs` |
+| Migrations | Run on startup, tracked in a migrations table |
+
+#### Container
+
+| Concern | Detail |
+|---|---|
+| Dev | Vite dev server (frontend) + Fastify (API), volume-mounted `src/` for hot reload |
+| Prod | Vite builds static assets, Fastify serves them and handles API |
+| DB persistence | SQLite file volume-mounted at `/data/app.db` |
+| Single command | `docker compose up` starts everything |
+
+#### Architecture
+
+```
+Browser (React SPA — tab layout)
+  ├── Upload tab → POST /api/upload (multipart CSV)
+  ├── Review tab → GET /api/records?page=&filter=&sort=
+  └── Export tab → GET /api/export (returns .xlsx download)
+        │
+  Fastify API (TypeScript)
+        │
+  SQLite (/data/app.db — volume-mounted)
+```
+
+#### Key Libraries — Do Not Substitute
+
+These are the agreed project dependencies. Do not replace them with alternatives unless explicitly discussed:
+
+- `react`, `react-dom` — UI framework
+- `tailwindcss` — styling
+- `@radix-ui/*` — accessible primitives (via shadcn/ui)
+- `@tanstack/react-table` — data table
+- `@tanstack/react-query` — data fetching
+- `react-hook-form`, `zod` — forms and validation
+- `papaparse` — CSV parsing
+- `fastify` — backend API
+- `better-sqlite3` — database
+- `exceljs` — Excel export
+- `clsx`, `tailwind-merge` — conditional class composition (`cn()` helper)
+- `vitest` — test runner
+- `@testing-library/react` — component testing
+
+### Path-Specific Instructions
+
+Detailed coding standards, behavioral rules, and conventions are in `.github/instructions/`. These are automatically applied by Copilot based on the file you are working on.
