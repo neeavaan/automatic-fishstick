@@ -21,7 +21,19 @@ async function start(): Promise<void> {
     await app.register(fastifyCors, { origin: 'http://localhost:5176' });
   }
 
-  await app.register(fastifyMultipart, { limits: { fileSize: 50 * 1024 * 1024 } });
+  await app.register(fastifyMultipart, { limits: { fileSize: 10 * 1024 * 1024 } }); // 10 MB – sufficient for bank statement CSVs
+
+  // Security headers on every response
+  app.addHook('onSend', async (_req, reply) => {
+    reply.header('X-Content-Type-Options', 'nosniff');
+    reply.header('X-Frame-Options', 'DENY');
+    reply.header('Referrer-Policy', 'no-referrer');
+    reply.header('X-XSS-Protection', '0'); // modern browsers use CSP instead
+    reply.header(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
+    );
+  });
 
   await app.register(uploadRoutes, { prefix: '/api', db });
   await app.register(recordsRoutes, { prefix: '/api', db });

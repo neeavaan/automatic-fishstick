@@ -38,8 +38,11 @@ export const uploadRoutes: FastifyPluginCallback<UploadPluginOptions> = (app, { 
 
     const data = await request.file();
     if (!data) return reply.status(400).send({ error: 'No file uploaded' });
-    if (!data.filename.endsWith('.csv')) {
-      return reply.status(400).send({ error: 'Only .csv files are accepted' });
+    if (
+      !data.filename.endsWith('.csv') ||
+      (data.mimetype !== 'text/csv' && data.mimetype !== 'text/plain' && data.mimetype !== 'application/vnd.ms-excel' && data.mimetype !== 'application/octet-stream')
+    ) {
+      return reply.status(400).send({ error: 'Only CSV files are accepted' });
     }
 
     const csvText = await data.toBuffer().then((b) => b.toString('utf8'));
@@ -155,8 +158,9 @@ function insertRows(
       const hash = rowHash(row);
 
       if (strategy === 'append') {
+        // Use row content + insertion counter for stable uniqueness within this batch
         const uniqueHash = createHash('sha256')
-          .update(JSON.stringify(row) + Date.now() + Math.random())
+          .update(JSON.stringify(row) + String(inserted + skipped + overwritten))
           .digest('hex');
         db.prepare(INSERT_SQL).run(rowValues(uniqueHash, row));
         inserted++;
