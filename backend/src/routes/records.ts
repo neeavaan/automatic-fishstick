@@ -8,17 +8,29 @@ interface RecordsPluginOptions {
 interface RecordsQuery {
   page?: string;
   pageSize?: string;
-  sort?: string;
-  order?: string;
   search?: string;
 }
 
 interface DbRecord {
   id: number;
-  row_hash: string;
-  data: string;
+  kirjauspaiva: string;
+  maksupaiva: string;
+  summa: number;
+  tapahtumalaji: string;
+  maksaja: string;
+  saajan_nimi: string;
+  saajan_tilinumero: string;
+  saajan_bic: string;
+  viitenumero: string;
+  viesti: string;
+  arkistointitunnus: string;
   created_at: string;
 }
+
+const SEARCH_COLUMNS = [
+  'saajan_nimi', 'maksaja', 'tapahtumalaji',
+  'viitenumero', 'viesti', 'arkistointitunnus',
+] as const;
 
 export const recordsRoutes: FastifyPluginCallback<RecordsPluginOptions> = (app, { db }, done) => {
   app.get<{ Querystring: RecordsQuery }>('/records', (_request, reply) => {
@@ -28,31 +40,31 @@ export const recordsRoutes: FastifyPluginCallback<RecordsPluginOptions> = (app, 
     const offset = (page - 1) * pageSize;
 
     let where = '';
-    const params: unknown[] = [];
+    const queryParams: (string | number)[] = [];
 
     if (search) {
-      where = "WHERE data LIKE ? ESCAPE '\\'";
-      params.push(`%${search.replace(/[%_\\]/g, '\\$&')}%`);
+      const pattern = `%${search.replace(/[%_\\]/g, '\\$&')}%`;
+      where = `WHERE (${SEARCH_COLUMNS.map((c) => `${c} LIKE ? ESCAPE '\\'`).join(' OR ')})`;
+      queryParams.push(...SEARCH_COLUMNS.map(() => pattern));
     }
 
     const total = (
-      db.prepare(`SELECT COUNT(*) as count FROM records ${where}`).get(...params) as {
+      db.prepare(`SELECT COUNT(*) as count FROM records ${where}`).get(queryParams) as {
         count: number;
       }
     ).count;
 
     const rows = db
-      .prepare(`SELECT id, data, created_at FROM records ${where} ORDER BY id DESC LIMIT ? OFFSET ?`)
-      .all(...params, pageSize, offset) as Array<Pick<DbRecord, 'id' | 'data' | 'created_at'>>;
-
-    const records = rows.map((r) => ({
-      id: r.id,
-      created_at: r.created_at,
-      ...(JSON.parse(r.data) as Record<string, string>),
-    }));
+      .prepare(
+        `SELECT id, kirjauspaiva, maksupaiva, summa, tapahtumalaji, maksaja,
+                saajan_nimi, saajan_tilinumero, saajan_bic, viitenumero, viesti,
+                arkistointitunnus, created_at
+         FROM records ${where} ORDER BY id DESC LIMIT ? OFFSET ?`,
+      )
+      .all([...queryParams, pageSize, offset]) as DbRecord[];
 
     return reply.send({
-      records,
+      records: rows,
       total,
       page,
       pageSize,
@@ -67,3 +79,4 @@ export const recordsRoutes: FastifyPluginCallback<RecordsPluginOptions> = (app, 
 
   done();
 };
+

@@ -5,6 +5,7 @@ export function parseCsvFile(file: File): Promise<ParsedCsv> {
   return new Promise((resolve, reject) => {
     Papa.parse<CsvRow>(file, {
       header: true,
+      delimiter: ';',
       skipEmptyLines: true,
       complete(results) {
         if (results.errors.length > 0) {

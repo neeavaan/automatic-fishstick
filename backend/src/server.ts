@@ -18,7 +18,7 @@ async function start(): Promise<void> {
   const app = Fastify({ logger: true });
 
   if (IS_DEV) {
-    await app.register(fastifyCors, { origin: 'http://localhost:5173' });
+    await app.register(fastifyCors, { origin: 'http://localhost:5176' });
   }
 
   await app.register(fastifyMultipart, { limits: { fileSize: 50 * 1024 * 1024 } });

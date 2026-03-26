@@ -1,12 +1,27 @@
 import { describe, it, expect } from 'vitest';
 import { validateCsv } from '../utils/validateCsv.js';
+import { REQUIRED_COLUMNS } from '../types/csv.types.js';
 import type { ParsedCsv } from '../types/csv.types.js';
 
+const validRow = {
+  'Kirjauspäivä': '10.03.2026',
+  'Maksupäivä': '10.03.2026',
+  'Summa': '-78',
+  'Tapahtumalaji': 'TILISIIRTO',
+  'Maksaja': 'MEIKÄLÄINEN MAIJA',
+  'Saajan nimi': 'HSY',
+  'Saajan tilinumero': 'FI49 5000 9420 0287 30',
+  'Saajan BIC-tunnus': 'SBAN FI HH',
+  'Viitenumero': '12360',
+  'Viesti': "'-'",
+  'Arkistointitunnus': '1234',
+};
+
 const base: ParsedCsv = {
-  headers: ['name', 'age'],
-  rows: [{ name: 'Alice', age: '30' }],
+  headers: [...REQUIRED_COLUMNS],
+  rows: [validRow],
   rowCount: 1,
-  columnCount: 2,
+  columnCount: REQUIRED_COLUMNS.length,
 };
 
 describe('validateCsv', () => {
@@ -26,13 +41,27 @@ describe('validateCsv', () => {
     expect(errors[0].message).toMatch(/no data rows/i);
   });
 
-  it('flags completely empty rows', () => {
+  it('flags a missing required column', () => {
     const errors = validateCsv({
       ...base,
-      rows: [{ name: 'Alice', age: '30' }, { name: '', age: '' }],
-      rowCount: 2,
+      headers: REQUIRED_COLUMNS.filter((c) => c !== 'Summa'),
     });
-    expect(errors).toHaveLength(1);
-    expect(errors[0].row).toBe(3);
+    expect(errors.some((e) => e.column === 'Summa')).toBe(true);
+  });
+
+  it('flags non-numeric Summa', () => {
+    const errors = validateCsv({
+      ...base,
+      rows: [{ ...validRow, Summa: 'abc' }],
+    });
+    expect(errors.some((e) => e.column === 'Summa')).toBe(true);
+  });
+
+  it('accepts comma-decimal Summa', () => {
+    const errors = validateCsv({
+      ...base,
+      rows: [{ ...validRow, Summa: '-54,00' }],
+    });
+    expect(errors).toHaveLength(0);
   });
 });

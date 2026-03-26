@@ -28,7 +28,7 @@ function runMigrations(db: Db): void {
     )
   `);
 
-  const migrationsDir = path.join(__dirname, '../migrations');
+  const migrationsDir = path.join(__dirname, '../../migrations');
   if (!fs.existsSync(migrationsDir)) return;
 
   const files = fs

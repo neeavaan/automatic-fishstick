@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"   # Fastify API
-      - "5173:5173"   # Vite dev server
+      - "5176:5176"   # Vite dev server
     volumes:
       - ./frontend/src:/app/frontend/src
       - ./frontend/index.html:/app/frontend/index.html

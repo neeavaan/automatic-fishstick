@@ -23,3 +23,17 @@ export interface UploadResult {
 }
 
 export type DuplicateStrategy = 'skip' | 'overwrite' | 'append';
+
+export const REQUIRED_COLUMNS = [
+  'Kirjauspäivä',
+  'Maksupäivä',
+  'Summa',
+  'Tapahtumalaji',
+  'Maksaja',
+  'Saajan nimi',
+  'Saajan tilinumero',
+  'Saajan BIC-tunnus',
+  'Viitenumero',
+  'Viesti',
+  'Arkistointitunnus',
+] as const;

@@ -1,11 +1,8 @@
 import type { ParsedCsv, ValidationError } from '../types/csv.types.js';
+import { REQUIRED_COLUMNS } from '../types/csv.types.js';
 
 /**
- * Validates a parsed CSV against the required schema.
- * Required columns and type rules are defined here and updated once the
- * output spec is confirmed (US-05 / US-12 are blocked pending schema clarification).
- *
- * Currently performs structural validation only (headers present, no empty rows).
+ * Validates a parsed CSV against the required bank transaction schema.
  */
 export function validateCsv(parsed: ParsedCsv): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -20,13 +17,27 @@ export function validateCsv(parsed: ParsedCsv): ValidationError[] {
     return errors;
   }
 
-  // Check for rows where all values are empty
+  // Check required columns
+  for (const col of REQUIRED_COLUMNS) {
+    if (!parsed.headers.includes(col)) {
+      errors.push({ column: col, message: `Required column "${col}" is missing` });
+    }
+  }
+
+  if (errors.length > 0) return errors;
+
+  // Validate Summa is numeric in every row
   parsed.rows.forEach((row, idx) => {
-    const allEmpty = Object.values(row).every((v) => v.trim() === '');
-    if (allEmpty) {
-      errors.push({ column: '*', row: idx + 2, message: 'Row is completely empty' });
+    const summaRaw = (row['Summa'] ?? '').replace(',', '.');
+    if (summaRaw === '' || isNaN(parseFloat(summaRaw))) {
+      errors.push({
+        column: 'Summa',
+        row: idx + 2,
+        message: `Row ${idx + 2}: Summa "${row['Summa']}" is not a valid number`,
+      });
     }
   });
 
   return errors;
 }
+
