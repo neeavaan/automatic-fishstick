@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"   # Fastify API
+      - "5176:5176"   # Vite dev server
+    volumes:
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/index.html:/app/frontend/index.html
+      - ./backend/src:/app/backend/src
+      - db-data:/data
+    environment:
+      - NODE_ENV=development
+      - DB_PATH=/data/app.db
+      - VITE_API_URL=http://localhost:3000
+
+volumes:
+  db-data:

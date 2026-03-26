@@ -1,0 +1,20 @@
+# Prevent host node_modules from being copied into image builds
+**/node_modules
+
+# Build outputs
+**/dist
+**/build
+
+# VCS and editor artifacts
+.git
+.gitignore
+.vscode
+.DS_Store
+
+# Logs
+**/*.log
+
+# Local database files
+**/*.db
+**/*.db-shm
+**/*.db-wal
