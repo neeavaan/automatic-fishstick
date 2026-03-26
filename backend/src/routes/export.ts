@@ -51,6 +51,7 @@ function parseMonthIndex(dateStr: string): number {
 function groupByMonth(
   records: DbRecord[],
   labelFn: (r: DbRecord) => string,
+  transformValue: (v: number) => number = (v) => v,
 ): Map<string, number[]> {
   const map = new Map<string, number[]>();
   for (const record of records) {
@@ -58,7 +59,7 @@ function groupByMonth(
     const month = parseMonthIndex(record.kirjauspaiva);
     if (month < 0 || month > 11) continue;
     if (!map.has(label)) map.set(label, new Array(12).fill(0));
-    map.get(label)![month] += record.summa;
+    map.get(label)![month] += transformValue(record.summa);
   }
   return map;
 }
@@ -139,7 +140,7 @@ export const exportRoutes: FastifyPluginCallback<ExportPluginOptions> = (app, { 
     const expenses = rows.filter((r) => r.summa < 0);
     const income = rows.filter((r) => r.summa >= 0);
 
-    const expenseGroups = groupByMonth(expenses, (r) => r.saajan_nimi);
+    const expenseGroups = groupByMonth(expenses, (r) => r.saajan_nimi, (v) => -v);
     const incomeGroups = groupByMonth(income, (r) => r.maksaja);
 
     const workbook = new ExcelJS.Workbook();
